@@ -1,0 +1,15 @@
+# Dependencias
+node_modules/
+
+# Archivos de logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Hardhat cache y artifacts
+cache/
+artifacts/
+
+# Archivos de sistema OS
+.DS_Store
+Thumbs.db
