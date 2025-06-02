@@ -1,7 +1,7 @@
 {
   "name": "crowdfunding-nft",
   "version": "1.0.0",
-  "description": "",
+  "description": "Install dependencies:  ```shell npm install --save-dev @nomicfoundation/hardhat-toolbox npm install @openzeppelin/contracts ```",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,9 +11,20 @@
   "license": "ISC",
   "devDependencies": {
     "@nomicfoundation/hardhat-toolbox": "^5.0.0",
-    "hardhat": "^2.24.0"
+    "hardhat": "^2.24.1"
   },
   "dependencies": {
     "@openzeppelin/contracts": "^5.3.0"
-  }
+  },
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/s-g-u/TDL_SOLIDITY.git"
+  },
+  "bugs": {
+    "url": "https://github.com/s-g-u/TDL_SOLIDITY/issues"
+  },
+  "homepage": "https://github.com/s-g-u/TDL_SOLIDITY#readme"
 }

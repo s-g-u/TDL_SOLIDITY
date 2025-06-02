@@ -3,6 +3,9 @@ const { ethers } = require("hardhat");
 async function main() {
   const [deployer] = await ethers.getSigners();
 
+  console.log("Deploying with account:", deployer.address);
+  console.log("Balance:", (await deployer.provider.getBalance(deployer.address)).toString());
+
   const Token = await ethers.getContractFactory("MyToken");
   const token = await Token.deploy();
   await token.waitForDeployment();
@@ -24,6 +27,7 @@ async function main() {
   console.log("Crowdfunding contract deployed to:", await crowdfunding.getAddress());
 
   await nft.transferOwnership(await crowdfunding.getAddress());
+  console.log("NFT ownership transferred to Crowdfund contract");
 }
 
 main().catch((error) => {
