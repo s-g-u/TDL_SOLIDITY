@@ -66,19 +66,25 @@ $ cast --help
 ```
 # PASO A PASO PARA LEVANTAR EL PROYECTO #
 
-1. Instalar Foundry
+Primero necesitan cambiar su terminal de cmd a bash, lo pueden hacer desde VS CODE.
+
+1. Ctrl + Shift + P
+2. Escribe Terminal: Select Default Profile → seleccionen Git Bash
+3. Ahora ya pueden ejecutar los comandos de Foundry.
+
+4. Instalar Foundry
 
 ```shell
 $ curl -L https://foundry.paradigm.xyz | bash
 ```
 
-2. Luego recargar la terminal y ejecutar el comando:
+5. Luego recargar la terminal y ejecutar el comando:
 
 ```shell
 $ foundryup
 ```
 
-3. Compilar el proyecto
+6. Compilar el proyecto
 
 ```shell
 $ forge build
@@ -91,5 +97,5 @@ $ anvil
 ```
 
 # Extensiones de VSCode
-1. Solidity (icono amarillo)
-2. Even Better TOML (icono blanco y rojo)
+a. Solidity (icono amarillo)
+b. Even Better TOML (icono blanco y rojo)
