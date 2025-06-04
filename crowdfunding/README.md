@@ -84,13 +84,19 @@ $ curl -L https://foundry.paradigm.xyz | bash
 $ foundryup
 ```
 
-6. Compilar el proyecto
+6. Instalar forge-std
+
+```shell
+$ forge install foundry-rs/forge-std
+```
+
+7. Compilar el proyecto
 
 ```shell
 $ forge build
 ```
 
-4. Correr Anvil (local node)
+8. Correr Anvil (local node)
 
 ```shell
 $ anvil
