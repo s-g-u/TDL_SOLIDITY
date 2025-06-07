@@ -88,9 +88,9 @@ contract CrowdFunding {
     }
 
     function rewardRandomFunder(string memory tokenURI) public onlyOwner {
-        require(funders.length > 0, "No funders to reward");
+        require(getFundersCount()> 0, "No funders to reward");
 
-        uint256 index = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % funders.length;
+        uint256 index = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % getFundersCount();
         address winner = funders[index];
 
         s_nftContract.mintNFT(winner, tokenURI);
