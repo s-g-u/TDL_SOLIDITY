@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.18;
 
+import { NFT } from "./NFT.sol";
 import { AggregatorV3Interface } from "../lib/chainlink-brownie-contracts/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import { PriceConverter } from "./PriceConverter.sol";
 
@@ -13,6 +14,7 @@ contract CrowdFunding {
     mapping(address => uint256) public addressToAmountFunded;
     address[] public funders;
 
+    NFT private s_nftContract;
     address public immutable i_owner;
     uint256 public constant MINIMUM_USD = 5 * 10 ** 18;
     AggregatorV3Interface private s_priceFeed;
@@ -21,9 +23,10 @@ contract CrowdFunding {
     event FundReceived(address indexed funder, uint256 amount);
     event FundsWithdrawn(address indexed owner, uint256 amount);
 
-    constructor(address priceFeed) {
+    constructor(address priceFeedM, address nftAddress) {
         i_owner = msg.sender;
-        s_priceFeed = AggregatorV3Interface(priceFeed);
+        s_priceFeed = AggregatorV3Interface(priceFeedM);
+        s_nftContract = NFT(nftAddress);
     }
 
     function fund() public payable {
@@ -83,4 +86,14 @@ contract CrowdFunding {
     receive() external payable {
         fund();
     }
+
+    function rewardRandomFunder(string memory tokenURI) public onlyOwner {
+        require(funders.length > 0, "No funders to reward");
+
+        uint256 index = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % funders.length;
+        address winner = funders[index];
+
+        s_nftContract.mintNFT(winner, tokenURI);
+    }
+
 }
