@@ -62,7 +62,6 @@ contract CrowdFunding {
     function withdraw() public onlyOwner onlyAfterDeadline {
         require(block.timestamp > i_deadline, "Funding still ongoing");
         uint256 fundedUSD = getTotalFundedInUSD();
-        require(fundedUSD >= i_goalUSD, "Funding goal not reached");
 
         rewardRandomFunder("ipfs://bafkreifmcavpce5i23st64h2u2336hioktks2rhmnczb7f6gftidpzj5ni");
         uint256 contractBalance = address(this).balance;
