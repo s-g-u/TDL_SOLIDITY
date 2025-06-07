@@ -18,15 +18,19 @@ contract CrowdFunding {
     address public immutable i_owner;
     uint256 public constant MINIMUM_USD = 5 * 10 ** 18;
     AggregatorV3Interface private s_priceFeed;
+    uint256 public immutable i_deadline;
+    uint256 public immutable i_goalUSD;
 
     // Eventos básicos para tracking
     event FundReceived(address indexed funder, uint256 amount);
     event FundsWithdrawn(address indexed owner, uint256 amount);
 
-    constructor(address priceFeedM, address nftAddress) {
+    constructor(address priceFeedM, address nftAddress, uint256 durationInMinutes, uint256 goalUSD) {
         i_owner = msg.sender;
         s_priceFeed = AggregatorV3Interface(priceFeedM);
         s_nftContract = NFT(nftAddress);
+        i_deadline = block.timestamp + (durationInMinutes * 60);
+        i_goalUSD = goalUSD; 
     }
 
     function fund() public payable {
@@ -50,7 +54,17 @@ contract CrowdFunding {
         _; // continua con la ejecución de la función
     }
 
-    function withdraw() public onlyOwner {
+    modifier onlyAfterDeadline() {
+        require(block.timestamp > i_deadline, "Funding still ongoing");
+        _;
+    }
+
+    function withdraw() public onlyOwner onlyAfterDeadline {
+        require(block.timestamp > i_deadline, "Funding still ongoing");
+        uint256 fundedUSD = getTotalFundedInUSD();
+        require(fundedUSD >= i_goalUSD, "Funding goal not reached");
+
+        rewardRandomFunder("ipfs://bafkreifmcavpce5i23st64h2u2336hioktks2rhmnczb7f6gftidpzj5ni");
         uint256 contractBalance = address(this).balance;
         
         // Limpiar mappings y array

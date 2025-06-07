@@ -15,7 +15,7 @@ contract DeployCrowdFunding is Script {
 
         NFT nft = new NFT();
         vm.startBroadcast(); // inicia la transmisión de transacciones
-        crowdFunding = new CrowdFunding(ethUsdPriceFeed, address(nft));
+        crowdFunding = new CrowdFunding(ethUsdPriceFeed, address(nft),10,100);
         vm.stopBroadcast();
         
         return crowdFunding;
