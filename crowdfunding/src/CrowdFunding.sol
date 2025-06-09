@@ -62,7 +62,7 @@ contract CrowdFunding {
     function withdraw() public onlyOwner onlyAfterDeadline {
         uint256 fundedUSD = getTotalFundedInUSD();
 
-        rewardRandomFunder("ipfs://bafkreifmcavpce5i23st64h2u2336hioktks2rhmnczb7f6gftidpzj5ni");
+        rewardRandomFunder("ipfs://bafkreibgi7vlha7b54idsxk44p6ncuykyxyqaxqg3qkoeakp5lshbvfmle");
         uint256 contractBalance = address(this).balance;
         
         // Limpiar mappings y array
