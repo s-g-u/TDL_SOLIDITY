@@ -18,7 +18,7 @@ contract CrowdFunding {
     address public immutable i_owner;
     uint256 public constant MINIMUM_USD = 5 * 10 ** 18;
     AggregatorV3Interface private s_priceFeed;
-    uint256 public immutable i_deadline;
+    uint256 public  i_deadline;
     uint256 public immutable i_goalUSD;
 
     // Eventos básicos para tracking
@@ -107,5 +107,28 @@ contract CrowdFunding {
 
         s_nftContract.mintNFT(winner, tokenURI);
     }
+
+    function refund() public onlyAfterDeadline {
+    require(getTotalFundedInUSD() < i_goalUSD, "Objetivo alcanzado, no hay reembolsos");
+    uint256 amount = addressToAmountFunded[msg.sender];
+    require(amount > 0, "No tenes fondos para reclamar");
+
+    addressToAmountFunded[msg.sender] = 0;
+    (bool sent, ) = payable(msg.sender).call{value: amount}("");
+    require(sent, "Error en el reembolso");
+    }
+
+    function getProgress() public view returns (uint256) {
+        uint256 totalFundedUSD = getTotalFundedInUSD();
+        if (totalFundedUSD >= i_goalUSD) {
+            return 100;
+        }
+        return (totalFundedUSD * 100) / i_goalUSD;
+    }
+
+    function extendDeadline(uint256 additionalMinutes) public onlyOwner {
+    i_deadline += additionalMinutes * 1 minutes;
+    }
+
 
 }
