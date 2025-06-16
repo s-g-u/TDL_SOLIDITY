@@ -5,10 +5,14 @@ import { NFT } from "./NFT.sol";
 import { AggregatorV3Interface } from "../lib/chainlink-brownie-contracts/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import { PriceConverter } from "./PriceConverter.sol";
 
-error CrowdFunding__NotOwner();
+import "../lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/Initializable.sol";
+import "../lib/openzeppelin-contracts-upgradeable/contracts/access/OwnableUpgradeable.sol";
+import "../lib/openzeppelin-contracts-upgradeable/contracts/proxy/utils/UUPSUpgradeable.sol";
+
+//error CrowdFunding__NotOwner();
 error CrowdFunding__WithdrawFailed();
 
-contract CrowdFunding {
+contract CrowdFunding is Initializable, OwnableUpgradeable, UUPSUpgradeable {
     using PriceConverter for uint256;
 
     mapping(address => uint256) public addressToAmountFunded;
@@ -49,10 +53,10 @@ contract CrowdFunding {
         return s_priceFeed.version();
     }
 
-    modifier onlyOwner() {
+    /*modifier onlyOwner() {
         if (msg.sender != i_owner) revert CrowdFunding__NotOwner();
         _; // continua con la ejecución de la función
-    }
+    }*/
 
     modifier onlyAfterDeadline() {
         require(block.timestamp > i_deadline, "Funding still ongoing");
@@ -62,7 +66,7 @@ contract CrowdFunding {
     function withdraw() public onlyOwner onlyAfterDeadline {
         uint256 fundedUSD = getTotalFundedInUSD();
 
-        rewardRandomFunder("ipfs://bafkreibgi7vlha7b54idsxk44p6ncuykyxyqaxqg3qkoeakp5lshbvfmle");
+        rewardRandomFunder("ipfs://bafkreifmcavpce5i23st64h2u2336hioktks2rhmnczb7f6gftidpzj5ni");
         uint256 contractBalance = address(this).balance;
         
         // Limpiar mappings y array
@@ -102,7 +106,9 @@ contract CrowdFunding {
     function rewardRandomFunder(string memory tokenURI) public onlyOwner {
         require(getFundersCount()> 0, "No funders to reward");
 
-        uint256 index = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % getFundersCount();
+        //uint256 index = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % getFundersCount();
+        uint256 index = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao))) % getFundersCount();
+
         address winner = funders[index];
 
         s_nftContract.mintNFT(winner, tokenURI);
@@ -130,5 +136,6 @@ contract CrowdFunding {
     i_deadline += additionalMinutes * 1 minutes;
     }
 
+    function _authorizeUpgrade(address newImplementation) internal override onlyOwner {}
 
 }
