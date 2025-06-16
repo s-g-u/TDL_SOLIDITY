@@ -90,13 +90,20 @@ $ foundryup
 $ forge install foundry-rs/forge-std
 ```
 
-7. Compilar el proyecto
+7. Instalar contrato upgradeable de OpenZeppelin
+
+```shell
+$ forge install OpenZeppelin/openzeppelin-contracts-upgradeable
+
+```
+
+8. Compilar el proyecto
 
 ```shell
 $ forge build
 ```
 
-8. Correr Anvil (local node)
+9. Correr Anvil (local node)
 
 ```shell
 $ anvil
