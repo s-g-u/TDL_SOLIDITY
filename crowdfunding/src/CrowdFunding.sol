@@ -4,6 +4,7 @@ pragma solidity ^0.8.18;
 import { NFT } from "./NFT.sol";
 import { AggregatorV3Interface } from "../lib/chainlink-brownie-contracts/contracts/src/v0.8/shared/interfaces/AggregatorV3Interface.sol";
 import { PriceConverter } from "./PriceConverter.sol";
+import { CashbackToken } from "./CashbackToken.sol";
 
 error CrowdFunding__NotOwner();
 error CrowdFunding__WithdrawFailed();
@@ -20,17 +21,19 @@ contract CrowdFunding {
     AggregatorV3Interface private s_priceFeed;
     uint256 public  i_deadline;
     uint256 public immutable i_goalUSD;
-
+    CashbackToken private s_token;
+    uint256 public cashbackPercentage = 5;
     // Eventos básicos para tracking
     event FundReceived(address indexed funder, uint256 amount);
     event FundsWithdrawn(address indexed owner, uint256 amount);
 
-    constructor(address priceFeedM, address nftAddress, uint256 durationInMinutes, uint256 goalUSD) {
+    constructor(address priceFeedM, address nftAddress, uint256 durationInMinutes, uint256 goalUSD, address tokenAddress) {
         i_owner = msg.sender;
         s_priceFeed = AggregatorV3Interface(priceFeedM);
         s_nftContract = NFT(nftAddress);
         i_deadline = block.timestamp + (durationInMinutes * 60);
         i_goalUSD = goalUSD; 
+        s_token = CashbackToken(tokenAddress);
     }
 
     function fund() public payable {
@@ -43,6 +46,9 @@ contract CrowdFunding {
         
         addressToAmountFunded[msg.sender] += msg.value;
         emit FundReceived(msg.sender, msg.value);
+
+        uint256 cashbackAmount = (msg.value * cashbackPercentage) / 100;
+        s_token.mint(msg.sender, cashbackAmount);
     }
 
     function getVersion() public view returns (uint256) {
