@@ -6,4 +6,4 @@
 	url = https://github.com/smartcontractkit/chainlink-brownie-contracts
 [submodule "crowdfunding/lib/openzeppelin-contracts"]
 	path = crowdfunding/lib/openzeppelin-contracts
-	url = https://github.com/OpenZeppelin/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts
