@@ -31,6 +31,16 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     margin-bottom: 16px;
     font-size: 30px;
     font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+
+    .title-icon {
+      font-size: 32px;
+      width: 32px;
+      height: 32px;
+    }
   }
 
   .subtitle {
@@ -207,6 +217,13 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
       gap: 8px;
+
+      .card-icon {
+        font-size: 20px;
+        width: 20px;
+        height: 20px;
+        color: $primary;
+      }
     }
 
     .card-content {
@@ -244,6 +261,13 @@ $shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     display: flex;
     align-items: center;
     gap: 8px;
+
+    .owner-icon {
+      font-size: 22px;
+      width: 22px;
+      height: 22px;
+      color: #d97706;
+    }
   }
 
   .owner-actions {

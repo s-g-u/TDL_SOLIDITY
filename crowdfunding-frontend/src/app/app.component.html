@@ -1,7 +1,10 @@
 <div class="container">
 
   <mat-card class="header-card">
-    <h1 class="title">🚀 CrowdFunding DApp</h1>
+    <h1 class="title">
+      <mat-icon class="title-icon">rocket_launch</mat-icon>
+      CrowdFunding DApp
+    </h1>
     <p class="subtitle">Plataforma descentralizada de crowdfunding</p>
 
     @if (!isConnected) {
@@ -67,7 +70,10 @@
     <div class="actions-container">
 
       <mat-card class="action-card">
-        <h3 class="card-title">💰 Contribuir al Proyecto</h3>
+        <h3 class="card-title">
+          <mat-icon class="card-icon">attach_money</mat-icon>
+          Contribuir al Proyecto
+        </h3>
         <div class="card-content">
           <mat-form-field class="full-width" appearance="outline">
             <mat-label>Cantidad en ETH</mat-label>
@@ -86,7 +92,10 @@
       </mat-card>
 
       <mat-card class="action-card">
-        <h3 class="card-title">🔄 Solicitar Reembolso</h3>
+        <h3 class="card-title">
+          <mat-icon class="card-icon">refresh</mat-icon>
+          Solicitar Reembolso
+        </h3>
         <p class="card-description">Solo si no se alcanzó la meta después del deadline</p>
         <button mat-raised-button color="warn" class="full-width" (click)="refund()"
           [disabled]="refunding || !isDeadlinePassed">
@@ -102,7 +111,10 @@
 
     @if (isOwner) {
     <mat-card class="owner-card">
-      <h3 class="owner-title">👑 Acciones del Owner</h3>
+      <h3 class="owner-title">
+        <mat-icon class="owner-icon">admin_panel_settings</mat-icon>
+        Acciones del Owner
+      </h3>
       <div class="owner-actions">
         <div class="owner-action">
           <h4>Retirar Fondos</h4>
