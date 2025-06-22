@@ -1,0 +1,300 @@
+$primary: #3b82f6;
+$secondary: #10b981;
+$accent: #f59e0b;
+$danger: #ef4444;
+$warning: #f97316;
+$success: #10b981;
+$bg-card: #ffffff;
+$text-primary: #1e293b;
+$text-secondary: #64748b;
+$border-color: #e2e8f0;
+$shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 16px;
+}
+
+.header-card {
+  background: $bg-card;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: $shadow;
+  border: 1px solid $border-color;
+  margin-bottom: 16px;
+  text-align: center;
+
+  .title {
+    color: $primary;
+    margin-bottom: 16px;
+    font-size: 30px;
+    font-weight: 700;
+  }
+
+  .subtitle {
+    color: $text-secondary;
+    margin-bottom: 24px;
+    font-size: 16px;
+  }
+
+  .connect-section {
+    margin-bottom: 16px;
+    
+    .connect-info {
+      margin-bottom: 16px;
+      
+      p {
+        margin-bottom: 8px;
+        font-size: 16px;
+      }
+    }
+  }
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.stats-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 32px;
+
+  .stat-card {
+    flex: 1;
+    min-width: 250px;
+    background: $bg-card;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: $shadow;
+    border: 1px solid $border-color;
+    text-align: center;
+    transition: all 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: $shadow-lg;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 8px;
+
+      &.primary { color: $primary; }
+      &.secondary { color: $secondary; }
+      &.accent { color: $accent; }
+    }
+
+    .stat-label {
+      color: $text-secondary;
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .stat-card {
+      min-width: 100%;
+    }
+  }
+}
+
+.progress-card {
+  background: $bg-card;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: $shadow;
+  border: 1px solid $border-color;
+  margin-bottom: 24px;
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: $text-primary;
+    }
+
+    .progress-value {
+      color: $primary;
+      font-weight: 700;
+      font-size: 18px;
+    }
+  }
+
+  .progress-bar {
+    width: 100%;
+    height: 12px;
+    background: $border-color;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 8px;
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, $secondary, $accent);
+      transition: width 0.3s ease;
+      border-radius: 6px;
+    }
+  }
+
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: $text-secondary;
+
+    .deadline-info {
+      .expired {
+        color: $danger;
+        font-weight: 600;
+      }
+    }
+  }
+}
+
+.contribution-card {
+  background: $bg-card;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: $shadow;
+  border: 1px solid $border-color;
+  margin-bottom: 24px;
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: $text-primary;
+  }
+
+  .contribution-amount {
+    color: $primary;
+    font-size: 20px;
+    font-weight: 700;
+  }
+}
+
+.actions-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  margin-bottom: 24px;
+
+  .action-card {
+    flex: 1;
+    min-width: 300px;
+    background: $bg-card;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: $shadow;
+    border: 1px solid $border-color;
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: $text-primary;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-description {
+      color: $text-secondary;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .action-card {
+      min-width: 100%;
+    }
+  }
+}
+
+.owner-card {
+  background: linear-gradient(135deg, #fef3c7, #fde68a);
+  border: 2px solid $accent;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: $shadow;
+
+  .owner-title {
+    color: #d97706;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .owner-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+
+    .owner-action {
+      flex: 1;
+      min-width: 250px;
+      padding: 16px;
+      background: rgba(255, 255, 255, 0.5);
+      border-radius: 8px;
+
+      h4 {
+        color: $text-primary;
+        margin-bottom: 8px;
+        font-size: 16px;
+        font-weight: 600;
+      }
+
+      .action-description {
+        margin-bottom: 16px;
+        color: $text-secondary;
+        font-size: 14px;
+      }
+
+      .action-inputs {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .owner-action {
+        min-width: 100%;
+      }
+    }
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.loading {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+} 

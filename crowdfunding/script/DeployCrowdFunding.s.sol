@@ -14,10 +14,14 @@ contract DeployCrowdFunding is Script {
         HelperConfig helperConfig = new HelperConfig();
         address ethUsdPriceFeed = helperConfig.activeNetworkConfig();
 
-        NFT nft = new NFT();
-        CashbackToken cashbackToken = new CashbackToken();
         vm.startBroadcast(); // inicia la transmisión de transacciones
-        crowdFunding = new CrowdFunding(ethUsdPriceFeed, address(nft),10,100, address(cashbackToken));
+        NFT nft = new NFT(msg.sender);
+        CashbackToken cashbackToken = new CashbackToken(msg.sender);
+        crowdFunding = new CrowdFunding(ethUsdPriceFeed, address(nft),10, 100 * 10**18, address(cashbackToken));
+        
+        // Transferir ownership del CashbackToken al contrato CrowdFunding
+        // para que pueda mintear tokens como cashback
+        cashbackToken.transferOwnership(address(crowdFunding));
         vm.stopBroadcast();
         
         return crowdFunding;

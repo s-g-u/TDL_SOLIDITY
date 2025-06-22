@@ -1,0 +1,142 @@
+<div class="container">
+
+  <mat-card class="header-card">
+    <h1 class="title">🚀 CrowdFunding DApp</h1>
+    <p class="subtitle">Plataforma descentralizada de crowdfunding</p>
+
+    @if (!isConnected) {
+    <button mat-raised-button color="primary" (click)="connectWallet()" [disabled]="connecting">
+      {{ connecting ? 'Conectando...' : 'Conectar Wallet' }}
+    </button>
+    }
+
+    @if (isConnected) {
+    <div class="connect-section">
+      <div class="connect-info">
+        <p><strong>Conectado:</strong> {{ userAddress }}</p>
+      </div>
+      <button mat-stroked-button (click)="disconnect()">
+        Desconectar
+      </button>
+    </div>
+    }
+  </mat-card>
+
+  @if (isConnected) {
+  <div class="main-content">
+
+    <div class="stats-container">
+      <mat-card class="stat-card">
+        <h3 class="stat-value primary">{{ totalFundedEth }} ETH</h3>
+        <p class="stat-label">Total Fondeado</p>
+      </mat-card>
+      <mat-card class="stat-card">
+        <h3 class="stat-value secondary">{{ totalFundedUSD }}</h3>
+        <p class="stat-label">Total en USD</p>
+      </mat-card>
+      <mat-card class="stat-card">
+        <h3 class="stat-value accent">{{ fundersCount }}</h3>
+        <p class="stat-label">Contribuyentes</p>
+      </mat-card>
+    </div>
+
+    <mat-card class="progress-card">
+      <div class="progress-header">
+        <h2>Progreso del Proyecto</h2>
+        <span class="progress-value">{{ progress }}%</span>
+      </div>
+      <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+      <div class="progress-info">
+        <span>Meta: {{ goalUSD }}</span>
+        <span class="deadline-info">
+          Deadline: {{ deadlineDate }}
+          @if (isDeadlinePassed) {
+          <span class="expired"> (Expirado)</span>
+          }
+        </span>
+      </div>
+    </mat-card>
+
+    @if (userContribution > 0) {
+    <mat-card class="contribution-card">
+      <h3>Tu Contribución</h3>
+      <p class="contribution-amount">{{ userContribution }} ETH</p>
+    </mat-card>
+    }
+
+    <div class="actions-container">
+
+      <mat-card class="action-card">
+        <h3 class="card-title">💰 Contribuir al Proyecto</h3>
+        <div class="card-content">
+          <mat-form-field class="full-width" appearance="outline">
+            <mat-label>Cantidad en ETH</mat-label>
+            <input matInput type="number" [(ngModel)]="fundAmount" placeholder="0.001" step="0.001" min="0">
+          </mat-form-field>
+          <button mat-raised-button color="primary" class="full-width" (click)="fund()"
+            [disabled]="funding || !fundAmount || isDeadlinePassed">
+            @if (funding) {
+            <mat-spinner diameter="20" class="loading"></mat-spinner>
+            Procesando...
+            } @else {
+            Contribuir
+            }
+          </button>
+        </div>
+      </mat-card>
+
+      <mat-card class="action-card">
+        <h3 class="card-title">🔄 Solicitar Reembolso</h3>
+        <p class="card-description">Solo si no se alcanzó la meta después del deadline</p>
+        <button mat-raised-button color="warn" class="full-width" (click)="refund()"
+          [disabled]="refunding || !isDeadlinePassed">
+          @if (refunding) {
+          <mat-spinner diameter="20" class="loading"></mat-spinner>
+          Procesando...
+          } @else {
+          Solicitar Reembolso
+          }
+        </button>
+      </mat-card>
+    </div>
+
+    @if (isOwner) {
+    <mat-card class="owner-card">
+      <h3 class="owner-title">👑 Acciones del Owner</h3>
+      <div class="owner-actions">
+        <div class="owner-action">
+          <h4>Retirar Fondos</h4>
+          <p class="action-description">Solo después del deadline</p>
+          <button mat-raised-button color="accent" (click)="withdraw()" [disabled]="withdrawing || !isDeadlinePassed">
+            @if (withdrawing) {
+            <mat-spinner diameter="20" class="loading"></mat-spinner>
+            Procesando...
+            } @else {
+            Retirar Fondos
+            }
+          </button>
+        </div>
+        <div class="owner-action">
+          <h4>Extender Deadline</h4>
+          <div class="action-inputs">
+            <mat-form-field appearance="outline">
+              <mat-label>Minutos adicionales</mat-label>
+              <input matInput type="number" [(ngModel)]="extendMinutes" placeholder="60" min="1">
+            </mat-form-field>
+            <button mat-stroked-button color="primary" (click)="extendDeadline()"
+              [disabled]="extending || !extendMinutes">
+              @if (extending) {
+              <mat-spinner diameter="20" class="loading"></mat-spinner>
+              Procesando...
+              } @else {
+              Extender
+              }
+            </button>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+    }
+  </div>
+  }
+</div>

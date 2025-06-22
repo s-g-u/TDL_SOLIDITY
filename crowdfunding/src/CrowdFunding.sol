@@ -17,7 +17,7 @@ contract CrowdFunding {
 
     NFT private s_nftContract;
     address public immutable i_owner;
-    uint256 public constant MINIMUM_USD = 5 * 10 ** 18;
+    uint256 public constant MINIMUM_USD = 1 * 10 ** 18;
     AggregatorV3Interface private s_priceFeed;
     uint256 public  i_deadline;
     uint256 public immutable i_goalUSD;
@@ -37,7 +37,7 @@ contract CrowdFunding {
     }
 
     function fund() public payable {
-        require(msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD, "El monto minimo es 5 USD");
+        require(msg.value.getConversionRate(s_priceFeed) >= MINIMUM_USD, "El monto minimo es 1 USD");
         
         // Solo agregar al array si es un nuevo donante (evita duplicados)
         if (addressToAmountFunded[msg.sender] == 0) {
@@ -108,7 +108,7 @@ contract CrowdFunding {
     function rewardRandomFunder(string memory tokenURI) public onlyOwner {
         require(getFundersCount()> 0, "No funders to reward");
 
-        uint256 index = uint256(keccak256(abi.encodePacked(block.timestamp, block.difficulty))) % getFundersCount();
+        uint256 index = uint256(keccak256(abi.encodePacked(block.timestamp, block.prevrandao))) % getFundersCount();
         address winner = funders[index];
 
         s_nftContract.mintNFT(winner, tokenURI);

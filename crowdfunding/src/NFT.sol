@@ -7,7 +7,7 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 contract NFT is ERC721URIStorage, Ownable {
     uint256 private s_tokenCounter;
 
-    constructor() ERC721("CrowdFundingNFT", "CFN") Ownable(msg.sender) {
+    constructor(address initialOwner) ERC721("CrowdFundingNFT", "CFN") Ownable(initialOwner) {
         s_tokenCounter = 0;
     }
 
