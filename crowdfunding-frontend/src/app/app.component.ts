@@ -334,36 +334,31 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   ] as const;
 
-  // Estado de la wallet
-  walletState: WalletState = {
+  public walletState: WalletState = {
     isConnected: false,
     address: null,
     chainId: null,
     connecting: false
   };
 
-  // Datos del contrato
-  totalFundedEth = '0';
-  totalFundedUSD = '$0.00';
-  fundersCount = '0';
-  progress = 0;
-  goalUSD = '$0.00';
-  deadlineDate = '';
-  isDeadlinePassed = false;
-  userContribution = 0;
-  isOwner = false;
+  public totalFundedEth = '0';
+  public totalFundedUSD = '$0.00';
+  public fundersCount = '0';
+  public progress = 0;
+  public goalUSD = '$0.00';
+  public deadlineDate = '';
+  public isDeadlinePassed = false;
+  public userContribution = 0;
+  public isOwner = false;
 
-  // Estados de carga
-  funding = false;
-  withdrawing = false;
-  refunding = false;
-  extending = false;
+  public funding = false;
+  public withdrawing = false;
+  public refunding = false;
+  public extending = false;
 
-  // Inputs
-  fundAmount = '';
-  extendMinutes = '';
+  public fundAmount = '';
+  public extendMinutes = '';
 
-  // Contrato
   private contract: any;
   private walletSubscription: Subscription | null = null;
 
@@ -389,15 +384,15 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  get isConnected() { return this.walletState.isConnected; }
-  get connecting() { return this.walletState.connecting; }
-  get userAddress() { return this.walletState.address || ''; }
+  public get isConnected() { return this.walletState.isConnected; }
+  public get connecting() { return this.walletState.connecting; }
+  public get userAddress() { return this.walletState.address || ''; }
 
-  async connectWallet() {
+  public async connectWallet() {
     await this.walletService.connectWallet();
   }
 
-  disconnect() {
+  public disconnect() {
     this.walletService.disconnect();
   }
 
@@ -414,11 +409,10 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  async loadContractData() {
+  private async loadContractData() {
     if (!this.contract || !this.walletState.address) return;
 
     try {
-
       try {
         const totalFunded = await this.contract.read.getTotalFunded();
         this.totalFundedEth = parseFloat(formatEther(totalFunded)).toFixed(4);
@@ -474,11 +468,10 @@ export class AppComponent implements OnInit, OnDestroy {
       }
 
     } catch (error) {
-      console.error('Error loading contract data:', error);
     }
   }
 
-  async fund() {
+  public async fund() {
     if (!this.fundAmount || !this.contract) {
       return;
     }
@@ -488,7 +481,6 @@ export class AppComponent implements OnInit, OnDestroy {
       alert('Por favor ingresa un monto válido');
       return;
     }
-
 
     this.funding = true;
     try {
@@ -504,8 +496,6 @@ export class AppComponent implements OnInit, OnDestroy {
       
       alert('¡Contribución exitosa!');
     } catch (error) {
-      console.error('Error funding:', error);
-      
       if (error instanceof Error) {
         if (error.message.includes('deadline') || error.message.includes('expired')) {
           alert('El crowdfunding ha expirado. No se pueden hacer más contribuciones.');
@@ -524,7 +514,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
 
-  async withdraw() {
+  public async withdraw() {
     if (!this.contract) return;
 
     this.withdrawing = true;
@@ -538,14 +528,13 @@ export class AppComponent implements OnInit, OnDestroy {
       
       alert('¡Fondos retirados exitosamente!');
     } catch (error) {
-      console.error('Error withdrawing:', error);
       alert('Error al retirar fondos. Revisa la consola para más detalles.');
     } finally {
       this.withdrawing = false;
     }
   }
 
-  async refund() {
+  public async refund() {
     if (!this.contract) return;
 
     this.refunding = true;
@@ -559,14 +548,13 @@ export class AppComponent implements OnInit, OnDestroy {
       
       alert('¡Reembolso procesado exitosamente!');
     } catch (error) {
-      console.error('Error requesting refund:', error);
       alert('Error al solicitar reembolso. Revisa la consola para más detalles.');
     } finally {
       this.refunding = false;
     }
   }
 
-  async extendDeadline() {
+  public async extendDeadline() {
     if (!this.extendMinutes || !this.contract) return;
 
     this.extending = true;
@@ -581,7 +569,6 @@ export class AppComponent implements OnInit, OnDestroy {
       this.extendMinutes = '';
       alert('¡Deadline extendido exitosamente!');
     } catch (error) {
-      console.error('Error extending deadline:', error);
       alert('Error al extender deadline. Revisa la consola para más detalles.');
     } finally {
       this.extending = false;
