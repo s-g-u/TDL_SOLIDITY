@@ -32,7 +32,9 @@ export class WalletService {
   }
 
   private initializeClients() {
+    // Solo inicializo si estamos en el navegador y si MetaMask está disponible
     if (typeof window !== 'undefined' && window.ethereum) {
+      // El publicClient me sirve para leer datos de la blockchain
       this.publicClient = createPublicClient({
         chain: sepolia,
         transport: http()
@@ -41,11 +43,13 @@ export class WalletService {
   }
 
   private async checkConnection() {
+    // Verifico si ya hay una wallet conectada al cargar la página
     if (typeof window !== 'undefined' && window.ethereum) {
       try {
         const accounts = await window.ethereum.request({ method: 'eth_accounts' });
         if (accounts.length > 0) {
           const chainId = await window.ethereum.request({ method: 'eth_chainId' });
+          // Actualizo el estado si encontré una cuenta conectada
           this.updateWalletState({
             isConnected: true,
             address: accounts[0],
@@ -62,10 +66,13 @@ export class WalletService {
 
   private setupEventListeners() {
     if (typeof window !== 'undefined' && window.ethereum) {
+      // Cuando el usuario cambia de cuenta en MetaMask
       window.ethereum.on('accountsChanged', (accounts: string[]) => {
         if (accounts.length === 0) {
+          // Si no hay cuentas, significa que se desconectó
           this.disconnect();
         } else {
+          // Si hay cuentas, actualizo con la nueva dirección
           this.updateWalletState({
             ...this.walletState.value,
             address: accounts[0]
@@ -73,6 +80,7 @@ export class WalletService {
         }
       });
 
+      // Cuando el usuario cambia de red
       window.ethereum.on('chainChanged', (chainId: string) => {
         this.updateWalletState({
           ...this.walletState.value,
@@ -80,6 +88,7 @@ export class WalletService {
         });
       });
 
+      // Cuando MetaMask se desconecta completamente
       window.ethereum.on('disconnect', () => {
         this.disconnect();
       });
@@ -92,12 +101,14 @@ export class WalletService {
       return false;
     }
 
+    // Pongo connecting en true para mostrar loading en la UI
     this.updateWalletState({
       ...this.walletState.value,
       connecting: true
     });
 
     try {
+      // Pido al usuario que conecte su wallet
       const accounts = await window.ethereum.request({ 
         method: 'eth_requestAccounts' 
       });
@@ -106,10 +117,12 @@ export class WalletService {
         throw new Error('No se seleccionó ninguna cuenta');
       }
 
+      // Me aseguro de que esté en la red Sepolia
       await this.switchToSepolia();
 
       const chainId = await window.ethereum.request({ method: 'eth_chainId' });
       
+      // Actualizo el estado con la información de la wallet conectada
       this.updateWalletState({
         isConnected: true,
         address: accounts[0],
@@ -123,6 +136,7 @@ export class WalletService {
     } catch (error: any) {
       console.error('Error connecting wallet:', error);
       
+      // Reseteo el estado si algo salió mal
       this.updateWalletState({
         isConnected: false,
         address: null,
@@ -141,13 +155,14 @@ export class WalletService {
   }
 
   private async switchToSepolia() {
+    // Me aseguro que el usuario esté en la red de testnet Sepolia
     try {
       await window.ethereum.request({
         method: 'wallet_switchEthereumChain',
         params: [{ chainId: '0xaa36a7' }], // Sepolia chainId
       });
     } catch (switchError: any) {
-      // Si la red no está agregada, la agregamos
+      // Si la red no está agregada en MetaMask, la agrego 
       if (switchError.code === 4902) {
         try {
           await window.ethereum.request({
@@ -175,6 +190,7 @@ export class WalletService {
   }
 
   private initializeWalletClient() {
+    // El walletClient me permite enviar transacciones (el publicClient solo lee)
     if (window.ethereum) {
       this.walletClient = createWalletClient({
         chain: sepolia,
@@ -183,7 +199,7 @@ export class WalletService {
     }
   }
 
-  disconnect() {
+  public disconnect() {
     this.updateWalletState({
       isConnected: false,
       address: null,
@@ -206,6 +222,7 @@ export class WalletService {
   }
 
   async addTokenToWallet(tokenAddress: string, tokenSymbol: string, tokenDecimals: number) {
+    // La uso para que aparezca el token CBK de cashback después de hacer una donación
     if (!window.ethereum) return false;
 
     try {
@@ -228,6 +245,7 @@ export class WalletService {
   }
 }
 
+// Declaro el tipo para TypeScript, así no me da errores con window.ethereum
 declare global {
   interface Window {
     ethereum?: any;
