@@ -31,6 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class AppComponent implements OnInit, OnDestroy {
   private readonly CONTRACT_ADDRESS = '0x406c9D3c1CeC0a65b9266A112257980C340cB718';
+  private readonly CASHBACK_TOKEN_ADDRESS = '0xc76cb1bf0a2b452b416d914bc4f5f814d321dea3';
   private readonly CONTRACT_ABI = [
     {
       "type": "constructor",
@@ -496,7 +497,17 @@ export class AppComponent implements OnInit, OnDestroy {
       this.fundAmount = '';
       await this.loadContractData();
       
-      alert('¡Contribución exitosa!');
+      const tokenAdded = await this.walletService.addTokenToWallet(
+        this.CASHBACK_TOKEN_ADDRESS,
+        'CBK',
+        18
+      );
+      
+      if (tokenAdded) {
+        alert('¡Contribución exitosa! Token CBK agregado a tu wallet.');
+      } else {
+        alert('¡Contribución exitosa! (No se pudo agregar el token CBK automáticamente)');
+      }
     } catch (error) {
       if (error instanceof Error) {
         if (error.message.includes('deadline') || error.message.includes('expired')) {
