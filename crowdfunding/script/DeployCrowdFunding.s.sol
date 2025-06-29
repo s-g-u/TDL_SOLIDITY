@@ -22,6 +22,9 @@ contract DeployCrowdFunding is Script {
         // Transferir ownership del CashbackToken al contrato CrowdFunding
         // para que pueda mintear tokens como cashback
         cashbackToken.transferOwnership(address(crowdFunding));
+
+        // lo mismo para el nft
+        nft.transferOwnership(address(crowdFunding));
         vm.stopBroadcast();
         
         return crowdFunding;
