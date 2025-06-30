@@ -30,8 +30,8 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit, OnDestroy {
-  private readonly CONTRACT_ADDRESS = '0x406c9D3c1CeC0a65b9266A112257980C340cB718';
-  private readonly CASHBACK_TOKEN_ADDRESS = '0xc76cb1bf0a2b452b416d914bc4f5f814d321dea3';
+  private readonly CONTRACT_ADDRESS = '0x3525Aaf91c8d3964A24679E0bfC4cEa5395CE251';
+  private readonly CASHBACK_TOKEN_ADDRESS = '0x28f950e32d5d11d285994cc520958b473b9870fc';
   private readonly CONTRACT_ABI = [
     {
       "type": "constructor",
@@ -420,36 +420,42 @@ export class AppComponent implements OnInit, OnDestroy {
         const totalFunded = await this.contract.read.getTotalFunded();
         this.totalFundedEth = parseFloat(formatEther(totalFunded)).toFixed(4);
       } catch (error) {
+        console.error('Error obteniendo total funded:', error);
       }
 
       try {
         const totalFundedUSD = await this.contract.read.getTotalFundedInUSD();
         this.totalFundedUSD = this.formatUSD(totalFundedUSD);
       } catch (error) {
+        console.error('Error obteniendo total funded USD:', error);
       }
 
       try {
         const fundersCount = await this.contract.read.getFundersCount();
         this.fundersCount = fundersCount.toString();
       } catch (error) {
+        console.error('Error obteniendo funders count:', error);
       }
 
       try {
         const owner = await this.contract.read.i_owner();
         this.isOwner = owner.toLowerCase() === this.walletState.address?.toLowerCase();
       } catch (error) {
+        console.error('Error obteniendo owner:', error);
       }
 
       try {
         const userContrib = await this.contract.read.addressToAmountFunded([this.walletState.address as `0x${string}`]);
         this.userContribution = parseFloat(formatEther(userContrib));
       } catch (error) {
+        console.error('Error obteniendo contribución del usuario:', error);
       }
 
       try {
         const goalUSD = await this.contract.read.i_goalUSD();
         this.goalUSD = this.formatUSD(goalUSD);
       } catch (error) {
+        console.error('Error obteniendo meta USD:', error);
         this.goalUSD = 'No definido';
       }
 
@@ -459,6 +465,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.deadlineDate = deadlineDate.toLocaleString('es-ES');
         this.isDeadlinePassed = Date.now() > Number(deadline) * 1000;
       } catch (error) {
+        console.error('Error obteniendo deadline:', error);
         this.deadlineDate = 'No definido';
         this.isDeadlinePassed = false;
       }
@@ -467,11 +474,21 @@ export class AppComponent implements OnInit, OnDestroy {
         const progress = await this.contract.read.getProgress();
         this.progress = Number(progress);
       } catch (error) {
+        console.error('Error obteniendo progreso:', error);
         this.progress = 0;
       }
 
     } catch (error) {
+      console.error('Error general cargando datos del contrato:', error);
     }
+  }
+
+  private formatUSD(value: bigint): string {
+    const usdValue = Number(value) / 1e18;
+    return new Intl.NumberFormat('es-ES', {
+      style: 'currency',
+      currency: 'USD'
+    }).format(usdValue);
   }
 
   public async fund() {
@@ -480,6 +497,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     const fundAmountStr = String(this.fundAmount).trim();
+    
     if (!fundAmountStr || isNaN(Number(fundAmountStr))) {
       alert('Por favor ingresa un monto válido');
       return;
@@ -492,7 +510,7 @@ export class AppComponent implements OnInit, OnDestroy {
         account: this.walletState.address as `0x${string}`
       });
 
-      await this.walletService.publicClient.waitForTransactionReceipt({ hash });
+      const receipt = await this.walletService.publicClient.waitForTransactionReceipt({ hash });
       
       this.fundAmount = '';
       await this.loadContractData();
@@ -509,6 +527,7 @@ export class AppComponent implements OnInit, OnDestroy {
         alert('¡Contribución exitosa! (No se pudo agregar el token CBK automáticamente)');
       }
     } catch (error) {
+      console.error('Error en fund:', error);
       if (error instanceof Error) {
         if (error.message.includes('deadline') || error.message.includes('expired')) {
           alert('El crowdfunding ha expirado. No se pueden hacer más contribuciones.');
@@ -528,7 +547,9 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public async withdraw() {
-    if (!this.contract) return;
+    if (!this.contract) {
+      return;
+    }
 
     this.withdrawing = true;
     try {
@@ -536,19 +557,22 @@ export class AppComponent implements OnInit, OnDestroy {
         account: this.walletState.address as `0x${string}`
       });
 
-      await this.walletService.publicClient.waitForTransactionReceipt({ hash });
+      const receipt = await this.walletService.publicClient.waitForTransactionReceipt({ hash });
+
       await this.loadContractData();
       
       alert('¡Fondos retirados exitosamente!');
     } catch (error) {
-      alert('Error al retirar fondos. Revisa la consola para más detalles.');
+      console.error('Error en withdraw:', error);
     } finally {
       this.withdrawing = false;
     }
   }
 
   public async refund() {
-    if (!this.contract) return;
+    if (!this.contract) {
+      return;
+    }
 
     this.refunding = true;
     try {
@@ -556,12 +580,13 @@ export class AppComponent implements OnInit, OnDestroy {
         account: this.walletState.address as `0x${string}`
       });
 
-      await this.walletService.publicClient.waitForTransactionReceipt({ hash });
+      const receipt = await this.walletService.publicClient.waitForTransactionReceipt({ hash });
+
       await this.loadContractData();
       
       alert('¡Reembolso procesado exitosamente!');
     } catch (error) {
-      alert('Error al solicitar reembolso. Revisa la consola para más detalles.');
+      console.error('Error en refund:', error);
     } finally {
       this.refunding = false;
     }
@@ -586,13 +611,5 @@ export class AppComponent implements OnInit, OnDestroy {
     } finally {
       this.extending = false;
     }
-  }
-
-  private formatUSD(value: bigint): string {
-    const usdValue = Number(value) / 1e18;
-    return new Intl.NumberFormat('es-ES', {
-      style: 'currency',
-      currency: 'USD'
-    }).format(usdValue);
   }
 } 

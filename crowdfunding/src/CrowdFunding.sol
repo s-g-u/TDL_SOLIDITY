@@ -65,8 +65,8 @@ contract CrowdFunding {
         _;
     }
 
-    function withdraw() public onlyOwner onlyAfterDeadline {
-        uint256 fundedUSD = getTotalFundedInUSD();
+    function withdraw() public onlyOwner {
+        require(block.timestamp > i_deadline || getTotalFundedInUSD() >= i_goalUSD, "El crowdfunding aun no ha terminado o la meta no ha sido alcanzada");
 
         rewardRandomFunder("ipfs://bafkreibgi7vlha7b54idsxk44p6ncuykyxyqaxqg3qkoeakp5lshbvfmle");
         uint256 contractBalance = address(this).balance;

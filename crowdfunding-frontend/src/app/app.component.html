@@ -119,7 +119,7 @@
         <div class="owner-action">
           <h4>Retirar Fondos</h4>
           <p class="action-description">Solo después del deadline</p>
-          <button mat-raised-button color="accent" (click)="withdraw()" [disabled]="withdrawing || !isDeadlinePassed">
+          <button mat-raised-button color="accent" (click)="withdraw()" [disabled]="withdrawing">
             @if (withdrawing) {
             <mat-spinner diameter="20" class="loading"></mat-spinner>
             Procesando...
