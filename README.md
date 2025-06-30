@@ -12,4 +12,4 @@ Sol Guadalupe Urbano:
 - Incorporé un deadline y un objetivo de recaudación en USD al contrato CrowdFunding.
 - Modifiqué el script de deploy para:
   - Desplegar los contratos NFT y CashbackToken correctamente,
-  - Transferir la propiedad del NFT y del token al contrato CrowdFunding para que pueda emitir recompensas.
+  - Transferir la propiedad del NFT al contrato CrowdFunding para que pueda emitir recompensas.
