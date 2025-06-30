@@ -1,7 +1,8 @@
 División de tareas:
 
 Matías Leguizamón:
-- Estructura base del Crowdfunding.sol, todo el frontend, walletService.
+- Implementé la estrucutra base del CrowdFunding y realicé modificaciones/mejoras/fixes en casi la totalidad del proyecto.
+- Desarrollé el diseño completo del frontend. Maquetado e integración completa con el contrato, incluyendo el walletService.
 
 Sol Guadalupe Urbano:
 - Implementé el contrato NFT y lo integré al contrato CrowdFunding.
